@@ -5,9 +5,6 @@ metadata:
   labels:
     {{- include "ocis.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "ocis.selectorLabels" . | nindent 6 }}
