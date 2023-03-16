@@ -36,6 +36,37 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+env:
+  OCIS_INSECURE: 
+    value: true
+  ACCOUNTS_DEMO_USERS_AND_GROUPS: 
+    value: false
+  OCIS_LOG_PRETTY: 
+    value: true
+  OCIS_LOG_COLOR: 
+    value: true
+  PROXY_TLS: 
+    value: false
+  PROXY_HTTP_ADDR: 
+    value: "0.0.0.0:{{ .Values.service.port }}"
+  OCIS_URL: 
+    value: "https://localhost:{{ .Values.service.port }}"
+  OCIS_JWT_SECRET:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: OCIS_JWT_SECRET
+  STORAGE_TRANSFER_SECRET:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: STORAGE_TRANSFER_SECRET
+  OCIS_MACHINE_AUTH_API_KEY:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: OCIS_MACHINE_AUTH_API_KEY
+
 service:
   type: ClusterIP
   port: 9200

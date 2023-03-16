@@ -51,6 +51,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+Render secrets 
+*/}}
+{{- include "ocis.secrets" . }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "ocis.serviceAccountName" -}}
