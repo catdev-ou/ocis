@@ -48,9 +48,9 @@ env:
   PROXY_TLS: 
     value: false
   PROXY_HTTP_ADDR: 
-    value: "0.0.0.0:{{ .Values.service.port }}"
+    value: "0.0.0.0:9200"
   OCIS_URL: 
-    value: "https://localhost:{{ .Values.service.port }}"
+    value: "https://localhost:9200"
   OCIS_JWT_SECRET:
     valueFrom:
       secretKeyRef:
