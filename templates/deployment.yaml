@@ -49,6 +49,17 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: {{ .Chart.Name }}-data
+              mountPath: /var/lib/ocis
+      volumes:
+        - name: {{ .Chart.Name }}-data
+          {{ if .Values.persistence.data.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}-data-claim
+          {{ else }}
+          emptyDir: {}
+          {{ end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

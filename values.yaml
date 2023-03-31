@@ -49,6 +49,32 @@ env:
     value: "0.0.0.0:9200"
   PROXY_INSECURE_BACKENDS:
     value: "true"
+  GRAPH_EVENTS_TLS_INSECURE:
+    value: "true"
+  PROXY_OIDC_INSECURE:
+    value: "true"
+  FRONTEND_ARCHIVER_INSECURE:
+    value: "true"
+  AUTH_BEARER_OIDC_INSECURE:
+    value: "true"
+  OCDAV_INSECURE:
+    value: "true"
+  THUMBNAILS_WEBDAVSOURCE_INSECURE:
+    value: "true"
+  THUMBNAILS_CS3SOURCE_INSECURE:
+    value: "true"
+  SEARCH_EVENTS_TLS_INSECURE:
+    value: "true"
+  AUDIT_EVENTS_TLS_INSECURE:
+    value: "true"
+  SHARING_EVENTS_TLS_INSECURE:
+    value: "true"
+  STORAGE_USERS_EVENTS_TLS_INSECURE:
+    value: "true"
+  NOTIFICATIONS_EVENTS_TLS_INSECURE:
+    value: "true"
+  NATS_TLS_SKIP_VERIFY_CLIENT_CERT:
+    value: "true"
   OCIS_URL: 
     value: "https://localhost:9200"
   OCIS_JWT_SECRET:
@@ -104,27 +130,27 @@ env:
   OCIS_SYSTEM_USER_ID:
     valueFrom:
       configMapKeyRef:
-        name: ocis-config
+        name: ocis-configs
         key: OCIS_SYSTEM_USER_ID
   OCIS_ADMIN_USER_ID:
     valueFrom:
       configMapKeyRef:
-        name: ocis-config
+        name: ocis-configs
         key: OCIS_ADMIN_USER_ID
   GRAPH_APPLICATION_ID:
     valueFrom:
       configMapKeyRef:
-        name: ocis-config
+        name: ocis-configs
         key: GRAPH_APPLICATION_ID
   STORAGE_USERS_MOUNT_ID:
     valueFrom:
       configMapKeyRef:
-        name: ocis-config
+        name: ocis-configs
         key: STORAGE_USERS_MOUNT_ID
   GATEWAY_STORAGE_USERS_MOUNT_ID:
     valueFrom:
       configMapKeyRef:
-        name: ocis-config
+        name: ocis-configs
         key: GATEWAY_STORAGE_USERS_MOUNT_ID
 
 service:
@@ -164,3 +190,31 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+persistence:
+  data:
+    # -- Enables persistence.
+    # Needs to be enabled on production installations.
+    # If not enabled, pod restarts will lead to data loss.
+    # Also scaling this service beyond one instance is not possible if the service instances don't share the same storage.
+    enabled: false
+    # -- Enables a initContainer to chown the volume.
+    # The initContainer is run as root.
+    # This is not needed if the driver applies the fsGroup from the securityContext.
+    storageClassName:
+    # -- Persistent volume access modes. Needs to be `["ReadWriteMany"]` when scaling this service beyond one instance.
+    accessModes:
+      - ReadWriteOnce
+    # -- Size of the persistent volume.
+    size: 10Gi
+    # -- Persistent volume annotations.
+    annotations: {}
+    # -- Persistent volume finalizers.
+    finalizers:
+      - kubernetes.io/pvc-protection
+    # -- Persistent volume selector labels.
+    selectorLabels: {}
+    # -- Use an existing PersistentVolumeClaim for persistence.
+    existingClaim:
+    # -- Per-service resources configuration. Overrides the default setting from `resources` if set.
+    resources: {}
