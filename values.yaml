@@ -36,17 +36,19 @@ securityContext: {}
 
 env:
   OCIS_INSECURE: 
-    value: true
+    value: "true"
   ACCOUNTS_DEMO_USERS_AND_GROUPS: 
-    value: false
+    value: "false"
   OCIS_LOG_PRETTY: 
-    value: true
+    value: "true"
   OCIS_LOG_COLOR: 
-    value: true
+    value: "true"
   PROXY_TLS: 
-    value: false
+    value: "false"
   PROXY_HTTP_ADDR: 
     value: "0.0.0.0:9200"
+  PROXY_INSECURE_BACKENDS:
+    value: "true"
   OCIS_URL: 
     value: "https://localhost:9200"
   OCIS_JWT_SECRET:
@@ -64,6 +66,66 @@ env:
       secretKeyRef:
         name: ocis-secrets
         key: OCIS_MACHINE_AUTH_API_KEY
+  OCIS_SYSTEM_USER_API_KEY:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: OCIS_SYSTEM_USER_API_KEY
+  IDM_ADMIN_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: IDM_ADMIN_PASSWORD
+  IDM_SVC_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: LDAP_BIND_PASSWORD
+  IDM_REVASVC_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: LDAP_BIND_PASSWORD
+  IDM_IDPSVC_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: LDAP_BIND_PASSWORD
+  LDAP_BIND_PASSWORD:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: LDAP_BIND_PASSWORD
+  THUMBNAILS_TRANSFER_TOKEN:
+    valueFrom:
+      secretKeyRef:
+        name: ocis-secrets
+        key: THUMBNAILS_TRANSFER_TOKEN
+  OCIS_SYSTEM_USER_ID:
+    valueFrom:
+      configMapKeyRef:
+        name: ocis-config
+        key: OCIS_SYSTEM_USER_ID
+  OCIS_ADMIN_USER_ID:
+    valueFrom:
+      configMapKeyRef:
+        name: ocis-config
+        key: OCIS_ADMIN_USER_ID
+  GRAPH_APPLICATION_ID:
+    valueFrom:
+      configMapKeyRef:
+        name: ocis-config
+        key: GRAPH_APPLICATION_ID
+  STORAGE_USERS_MOUNT_ID:
+    valueFrom:
+      configMapKeyRef:
+        name: ocis-config
+        key: STORAGE_USERS_MOUNT_ID
+  GATEWAY_STORAGE_USERS_MOUNT_ID:
+    valueFrom:
+      configMapKeyRef:
+        name: ocis-config
+        key: GATEWAY_STORAGE_USERS_MOUNT_ID
 
 service:
   type: ClusterIP
@@ -79,7 +141,7 @@ ingress:
     - host: cloud.ocis.com
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
